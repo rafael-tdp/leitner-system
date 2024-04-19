@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(cors());
 app.use("/cards", cardRoutes);
 
-const PORT = 8080;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`);
