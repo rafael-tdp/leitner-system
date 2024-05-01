@@ -31,7 +31,7 @@ test("getAllCards", () => {
 	it("should return all cards with all tag specified", () => {
 		const tags = ["Programming", "Geography"];
 		const filteredCards = cardService.getAllCards(tags);
-		const expectedCards = null;
+		const expectedCards = [];
 		tags.forEach((tag) => {
 			const cardsWithTag = cards.filter((card) => card.tag === tag);
 			expectedCards.concat(cardsWithTag);
