@@ -20,6 +20,13 @@ test("getAllCards", () => {
 		const allCards = cardService.getAllCards();
 		expect(allCards).toEqual(cards);
 	});
+
+	it("should return all cards with a specific tag", () => {
+		const tag = "Programming";
+		const filteredCards = cardService.getAllCards(tag);
+		const expectedCards = cards.filter((card) => card.tag === tag);
+		expect(filteredCards).toEqual(expectedCards);
+	});
 });
 
 test("getCardById", () => {

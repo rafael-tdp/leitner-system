@@ -34,6 +34,13 @@ const cards = [
 		tag: "Geography",
 		category: "FIRST",
 	},
+	{
+		id: "b1c6d4f4-9b6b-4c6c-8b0b-0f8c4e2a0e7a",
+		question: "What is the best programming language?",
+		answer: "JavaScript",
+		tag: "Programming",
+		category: "FIRST",
+	}
 ];
 
 module.exports = cards;
