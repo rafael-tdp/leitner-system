@@ -10,8 +10,8 @@ const cardService = {
 		return cardRepository.getCardById(cardId);
 	},
 
-	getAllCards: function () {
-		return cardRepository.getAllCards();
+	getAllCards: function (tags) {
+		return cardRepository.getAllCards(tags);
 	},
 
 	getQuizz: function () {

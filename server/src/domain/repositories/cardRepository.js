@@ -12,7 +12,10 @@ const cardRepository = {
 	getCardById: function (cardId) {
 		return cards.find((card) => card.id === cardId);
 	},
-	getAllCards: function () {
+	getAllCards: function (tags) {
+		if (tags != null) {
+			return cards.filter((card) => card.tag === tags);
+		}
 		return cards;
 	},
 	updateCard: function (card) {

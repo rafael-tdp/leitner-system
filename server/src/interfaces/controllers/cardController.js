@@ -2,7 +2,8 @@ const cardService = require("../../application/services/cardService");
 
 function getAllCards(req, res) {
 	try {
-		const cards = cardService.getAllCards();
+		const tags = req.query.tags ?? null;
+		const cards = cardService.getAllCards(tags);
 		res.json(cards);
 	} catch (error) {
 		res.status(500).json({ message: error.message });
