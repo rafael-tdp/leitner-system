@@ -31,10 +31,10 @@ test("getAllCards", () => {
 	it("should return all cards with all tag specified", () => {
 		const tags = ["Programming", "Geography"];
 		const filteredCards = cardService.getAllCards(tags);
-		const expectedCards = [];
+		let expectedCards = [];
 		tags.forEach((tag) => {
 			const cardsWithTag = cards.filter((card) => card.tag === tag);
-			expectedCards.concat(cardsWithTag);
+			expectedCards = expectedCards.concat(cardsWithTag);
 		});
 		expect(filteredCards).toEqual(expectedCards);
 	});
