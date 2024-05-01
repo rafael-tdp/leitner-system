@@ -27,6 +27,23 @@ test("getAllCards", () => {
 		const expectedCards = cards.filter((card) => card.tag === tag);
 		expect(filteredCards).toEqual(expectedCards);
 	});
+
+	it("should return all cards with all tag specified", () => {
+		const tags = ["Programming", "Geography"];
+		const filteredCards = cardService.getAllCards(tags);
+		const expectedCards = null;
+		tags.forEach((tag) => {
+			const cardsWithTag = cards.filter((card) => card.tag === tag);
+			expectedCards.concat(cardsWithTag);
+		});
+		expect(filteredCards).toEqual(expectedCards);
+	});
+
+	it("should return an empty array if the card with tag does not exist", () => {
+		const tag = "invalidTag";
+		const filteredCards = cardService.getAllCards(tag);
+		expect(filteredCards).toEqual([]);
+	});
 });
 
 test("getCardById", () => {
