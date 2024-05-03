@@ -4,15 +4,13 @@ const generateId = require("../../utils/generateId");
 const CardValidator = require("../../application/validators/CardValidator");
 const jsonUtils = require("../../utils/jsonUtils");
 
-const PATH_TO_CARD_DATA = "./src/infrastructures/data/cards.json";
-
 const cardRepository = {
 	addCard: function (card) {
 		const newId = generateId();
 		const newCard = new Card({ ...card, id: newId });
 		CardValidator.isCardValid(newCard);
 		
-		jsonUtils.writeFile(PATH_TO_CARD_DATA, [...cards, newCard]);
+		jsonUtils.writeFile([...cards, newCard]);
 
 		return newCard;
 	},
@@ -34,7 +32,7 @@ const cardRepository = {
 		return cards;
 	},
 	updateCard: function (card) {
-		jsonUtils.writeFile(PATH_TO_CARD_DATA, cards.map((c) => c.id === card.id ? card : c));
+		jsonUtils.writeFile(cards.map((c) => c.id === card.id ? card : c));
 		return card;
 	},
 };

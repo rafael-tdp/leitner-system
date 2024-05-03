@@ -1,9 +1,11 @@
 const fs = require('fs');
 
-const writeFile = (filePath, data) => {
+const FILE_PATH = "./src/infrastructures/data/cards.json";
+
+const writeFile = (data) => {
     try {
         const jsonData = JSON.stringify(data);
-        fs.writeFileSync(filePath, jsonData);
+        fs.writeFileSync(FILE_PATH, jsonData);
     }
     catch (err) {
         console.error(err);
