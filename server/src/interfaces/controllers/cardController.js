@@ -36,7 +36,11 @@ function answerCard(req, res) {
 		const card = cardService.answerCard(cardId, answer);
 		res.json(card);
 	} catch (error) {
-		res.status(500).json({ message: error.message });
+		if (error.message === 'Card not found') {
+			res.status(404).json({ message: 'Card not found'});
+		  } else {
+			res.status(500).json({ message: error.message });
+		  }
 	}
 }
 

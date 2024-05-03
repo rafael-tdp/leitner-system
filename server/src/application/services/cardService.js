@@ -6,10 +6,6 @@ const cardService = {
 		return cardRepository.addCard(card);
 	},
 
-	getCardById: function (cardId) {
-		return cardRepository.getCardById(cardId);
-	},
-
 	getAllCards: function (tags) {
 		return cardRepository.getAllCards(tags);
 	},
@@ -58,9 +54,8 @@ const cardService = {
 		return nextReviewDate;
 	},
 
-	processCorrectAnswer: function (cardId) {
+	processCorrectAnswer: function (card) {
 		const currentDate = new Date();
-		const card = this.checkCardExists(cardId);
 		const nextCategoryValue = this.getNextCategory(card);
 		card.nextReviewDate = this.calculateNextReviewDate(
 			currentDate,
@@ -70,20 +65,19 @@ const cardService = {
 		return cardRepository.updateCard(card);
 	},
 
-	processIncorrectAnswer: function (cardId) {
-		const card = this.checkCardExists(cardId);
+	processIncorrectAnswer: function (card) {
 		card.category = categories[0].value;
 		card.nextReviewDate = new Date();
 		return cardRepository.updateCard(card);
 	},
 
 	answerCard: function (cardId, answer) {
-		const card = this.getCardById(cardId);
+		const card = this.checkCardExists(cardId);
 		if (this.isCorrectAnswer(card, answer)) {
-			this.processCorrectAnswer(cardId);
+			this.processCorrectAnswer(card);
 			return { isValid: true };
 		}
-		this.processIncorrectAnswer(cardId);
+		this.processIncorrectAnswer(card);
 		return { isValid: false };
 	},
 };
