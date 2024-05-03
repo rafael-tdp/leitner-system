@@ -32,7 +32,7 @@ const cardService = {
 	checkCardExists: function (cardId) {
 		const card = cardRepository.getCardById(cardId);
 		if (!card) {
-			throw new Error("Card not found");
+			throw new Error("CARD_NOT_FOUND");
 		}
 		return card;
 	},

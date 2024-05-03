@@ -1,4 +1,5 @@
 const cardService = require("../../application/services/cardService");
+const AnswerValidator = require("../../application/validators/AnswerValidator");
 
 function getAllCards(req, res) {
 	try {
@@ -33,14 +34,20 @@ function answerCard(req, res) {
 	const cardId = req.params.cardId;
 	const answer = req.body.answer;
 	try {
+		AnswerValidator.isAnswerValid(cardId, answer);
 		const card = cardService.answerCard(cardId, answer);
 		res.json(card);
 	} catch (error) {
-		if (error.message === 'Card not found') {
-			res.status(404).json({ message: 'Card not found'});
-		  } else {
-			res.status(500).json({ message: error.message });
-		  }
+		switch(error.message){
+			case 'CARD_NOT_FOUND':
+				res.status(404).json({ message: 'Card not found' });
+				break;
+			case 'BODY_MALFORMED':
+				res.status(400).json({ message: 'Card Id and answer are required' });
+				break;
+			default:
+				res.status(500).json({ message: error.message });
+		}
 	}
 }
 

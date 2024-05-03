@@ -24,8 +24,6 @@ const isCardValid = (card) => {
         throw new Error('Card tag is required and must be a string');
     };
 
-
-
     return true;
 }
 
