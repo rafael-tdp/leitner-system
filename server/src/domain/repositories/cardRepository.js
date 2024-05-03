@@ -1,10 +1,10 @@
 const Card = require("../models/Card");
-const cards = require("../../infrastructures/data/cardData.json");
+const cards = require("../../infrastructures/data/cards.json");
 const generateId = require("../../utils/generateId");
 const CardValidator = require("../../application/validators/CardValidator");
 const jsonUtils = require("../../utils/jsonUtils");
 
-const PATH_TO_CARD_DATA = "./src/infrastructures/data/cardData.json";
+const PATH_TO_CARD_DATA = "./src/infrastructures/data/cards.json";
 
 const cardRepository = {
 	addCard: function (card) {
