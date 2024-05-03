@@ -5,6 +5,7 @@ class Card {
 		this.answer = answer;
 		this.tag = tag;
 		this.category = "FIRST";
+		this.nextReviewDate = new Date();
 	}
 
 	updateCategory(category) {
