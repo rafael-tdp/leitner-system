@@ -1,12 +1,19 @@
 const Card = require("../models/Card");
-const cards = require("../../infrastructures/data/cardsData");
+const cards = require("../../infrastructures/data/cardData.json");
 const generateId = require("../../utils/generateId");
+const CardValidator = require("../../application/validators/CardValidator");
+const jsonUtils = require("../../utils/jsonUtils");
+
+const PATH_TO_CARD_DATA = "./src/infrastructures/data/cardData.json";
 
 const cardRepository = {
 	addCard: function (card) {
 		const newId = generateId();
 		const newCard = new Card({ ...card, id: newId });
-		cards.push(newCard);
+		CardValidator.isCardValid(newCard);
+		
+		jsonUtils.writeFile(PATH_TO_CARD_DATA, [...cards, newCard]);
+
 		return newCard;
 	},
 	getCardById: function (cardId) {
@@ -27,8 +34,7 @@ const cardRepository = {
 		return cards;
 	},
 	updateCard: function (card) {
-		const cardIndex = cards.findIndex((c) => c.id === card.id);
-		cards[cardIndex] = card;
+		jsonUtils.writeFile(PATH_TO_CARD_DATA, cards.map((c) => c.id === card.id ? card : c));
 		return card;
 	},
 };

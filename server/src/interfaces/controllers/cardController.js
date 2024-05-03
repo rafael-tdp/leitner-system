@@ -10,26 +10,13 @@ function getAllCards(req, res) {
 	}
 }
 
-function getCardById(req, res) {
-	const cardId = req.params.id;
-	try {
-		const card = cardService.getCardById(cardId);
-		if (!card) {
-			return res.status(404).json({ message: "Card not found" });
-		}
-		res.json(card);
-	} catch (error) {
-		res.status(500).json({ message: error.message });
-	}
-}
-
 function addCard(req, res) {
 	const newCard = req.body;
 	try {
 		const card = cardService.addCard(newCard);
 		res.status(201).json(card);
 	} catch (error) {
-		res.status(500).json({ message: error.message });
+		res.status(400).json({ message: error.message });
 	}
 }
 
@@ -43,7 +30,7 @@ function getQuizz(req, res) {
 }
 
 function answerCard(req, res) {
-	const cardId = req.params.id;
+	const cardId = req.params.cardId;
 	const answer = req.body.answer;
 	try {
 		const card = cardService.answerCard(cardId, answer);
@@ -55,7 +42,6 @@ function answerCard(req, res) {
 
 module.exports = {
 	getAllCards,
-	getCardById,
 	addCard,
 	getQuizz,
 	answerCard,
