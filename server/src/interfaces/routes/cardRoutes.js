@@ -7,6 +7,6 @@ router.get("/", cardController.getAllCards);
 router.get("/quizz", cardController.getQuizz);
 router.get("/:id", cardController.getCardById);
 router.post("/", cardController.addCard);
-router.patch("/:id/answer", cardController.answerCard);
+router.patch("/:cardId/answer", cardController.answerCard);
 
 module.exports = router;
