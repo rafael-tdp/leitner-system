@@ -1,6 +1,6 @@
 const cardRepository = require("../../domain/repositories/cardRepository");
 const categories = require("../../lib/categories");
-
+const dateUtils = require("../../utils/dateUtils");
 const cardService = {
 	addCard: function (card) {
 		return cardRepository.addCard(card);
@@ -21,8 +21,7 @@ const cardService = {
 	},
 
 	needCardReview: function (card) {
-		const currentDate = new Date();
-		return !card.nextReviewDate || card.nextReviewDate < currentDate;
+		return dateUtils.isNextReviewToday(new Date(card.nextReviewDate));
 	},
 
 	isCorrectAnswer: function (card, answer) {
