@@ -1,4 +1,5 @@
 const cardService = require("../../application/services/cardService");
+const AnswerValidator = require("../../application/validators/AnswerValidator");
 
 function getAllCards(req, res) {
 	try {
@@ -10,26 +11,13 @@ function getAllCards(req, res) {
 	}
 }
 
-function getCardById(req, res) {
-	const cardId = req.params.id;
-	try {
-		const card = cardService.getCardById(cardId);
-		if (!card) {
-			return res.status(404).json({ message: "Card not found" });
-		}
-		res.json(card);
-	} catch (error) {
-		res.status(500).json({ message: error.message });
-	}
-}
-
 function addCard(req, res) {
 	const newCard = req.body;
 	try {
 		const card = cardService.addCard(newCard);
 		res.status(201).json(card);
 	} catch (error) {
-		res.status(500).json({ message: error.message });
+		res.status(400).json({ message: error.message });
 	}
 }
 
@@ -43,19 +31,28 @@ function getQuizz(req, res) {
 }
 
 function answerCard(req, res) {
-	const cardId = req.params.id;
+	const cardId = req.params.cardId;
 	const answer = req.body.answer;
 	try {
+		AnswerValidator.isAnswerValid(cardId, answer);
 		const card = cardService.answerCard(cardId, answer);
 		res.json(card);
 	} catch (error) {
-		res.status(500).json({ message: error.message });
+		switch(error.message){
+			case 'CARD_NOT_FOUND':
+				res.status(404).json({ message: 'Card not found' });
+				break;
+			case 'BODY_MALFORMED':
+				res.status(400).json({ message: 'Card Id and answer are required' });
+				break;
+			default:
+				res.status(500).json({ message: error.message });
+		}
 	}
 }
 
 module.exports = {
 	getAllCards,
-	getCardById,
 	addCard,
 	getQuizz,
 	answerCard,

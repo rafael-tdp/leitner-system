@@ -1,13 +1,10 @@
 const cardRepository = require("../../domain/repositories/cardRepository");
 const categories = require("../../lib/categories");
-
+const dateUtils = require("../../utils/dateUtils");
+const errors = require("../../lib/errors");
 const cardService = {
 	addCard: function (card) {
 		return cardRepository.addCard(card);
-	},
-
-	getCardById: function (cardId) {
-		return cardRepository.getCardById(cardId);
 	},
 
 	getAllCards: function (tags) {
@@ -25,8 +22,7 @@ const cardService = {
 	},
 
 	needCardReview: function (card) {
-		const currentDate = new Date();
-		return !card.nextReviewDate || card.nextReviewDate < currentDate;
+		return dateUtils.isNextReviewToday(new Date(card.nextReviewDate));
 	},
 
 	isCorrectAnswer: function (card, answer) {
@@ -36,7 +32,7 @@ const cardService = {
 	checkCardExists: function (cardId) {
 		const card = cardRepository.getCardById(cardId);
 		if (!card) {
-			throw new Error("Card not found");
+			throw new Error(errors.CARD_NOT_FOUND);
 		}
 		return card;
 	},
@@ -58,9 +54,8 @@ const cardService = {
 		return nextReviewDate;
 	},
 
-	processCorrectAnswer: function (cardId) {
+	processCorrectAnswer: function (card) {
 		const currentDate = new Date();
-		const card = this.checkCardExists(cardId);
 		const nextCategoryValue = this.getNextCategory(card);
 		card.nextReviewDate = this.calculateNextReviewDate(
 			currentDate,
@@ -70,20 +65,19 @@ const cardService = {
 		return cardRepository.updateCard(card);
 	},
 
-	processIncorrectAnswer: function (cardId) {
-		const card = this.checkCardExists(cardId);
+	processIncorrectAnswer: function (card) {
 		card.category = categories[0].value;
 		card.nextReviewDate = new Date();
 		return cardRepository.updateCard(card);
 	},
 
 	answerCard: function (cardId, answer) {
-		const card = this.getCardById(cardId);
+		const card = this.checkCardExists(cardId);
 		if (this.isCorrectAnswer(card, answer)) {
-			this.processCorrectAnswer(cardId);
+			this.processCorrectAnswer(card);
 			return { isValid: true };
 		}
-		this.processIncorrectAnswer(cardId);
+		this.processIncorrectAnswer(card);
 		return { isValid: false };
 	},
 };
