@@ -1,6 +1,7 @@
 const cardRepository = require("../../domain/repositories/cardRepository");
 const categories = require("../../lib/categories");
 const dateUtils = require("../../utils/dateUtils");
+const errors = require("../../lib/errors");
 const cardService = {
 	addCard: function (card) {
 		return cardRepository.addCard(card);
@@ -31,7 +32,7 @@ const cardService = {
 	checkCardExists: function (cardId) {
 		const card = cardRepository.getCardById(cardId);
 		if (!card) {
-			throw new Error("CARD_NOT_FOUND");
+			throw new Error(errors.CARD_NOT_FOUND);
 		}
 		return card;
 	},
