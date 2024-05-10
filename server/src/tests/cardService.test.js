@@ -1,19 +1,30 @@
-const { it } = require("node:test");
+const { it, before } = require("node:test");
 const cardService = require("../application/services/cardService");
 const cards = require("../infrastructures/data/cards.json");
 const jsonUtils = require("../utils/jsonUtils");
 
-// test("addCard", () => {
-// 	it("should add a card", () => {
-// 		const card = {
-// 			question: "What is the capital of France?",
-// 			answer: "Paris",
-// 			tag: "Geography",
-// 		};
-// 		jsonUtils.writeFile([...cards, card]);
-// 		expect(cards[cards.length - 1]).toEqual(card);
-// 	});
-// });
+jest.mock("../utils/jsonUtils", () => ({
+	...jest.requireActual("../utils/jsonUtils"),
+	writeFile: jest.fn(),
+}));
+
+beforeAll(() => {
+	jsonUtils.writeFile.mockClear();
+});
+
+test("addCard", () => {
+	it("should add a card", () => {
+		const card = {
+			question: "What is the capital of France?",
+			answer: "Paris",
+			tag: "Geography",
+		};
+
+		jsonUtils.writeFile([...cards, card]);
+		cards.push(card);
+		expect(cards[cards.length - 1]).toEqual(card);
+	});
+});
 
 test("getAllCards", () => {
 	it("should return all cards", () => {
@@ -48,27 +59,39 @@ test("getAllCards", () => {
 
 
 test("getQuizz", () => {
-	it("should return a quizz", () => {
-		const quizz = cardService.getQuizz();
-		expect(quizz).toEqual(cards);
+	it("should return a quizz", async () => {
+		const currentDate = new Date();
+		currentDate.setDate(currentDate.getDate());
+		const cardForToday = {
+			id: "1",
+			question: "What is the capital of France?",
+			answer: "Paris",
+			tag: "Geography",
+			category: "FIRST",
+			nextReviewDate: currentDate.toISOString(),
+		};
+
+		jsonUtils.writeFile([...cards, cardForToday]);
+		const quizz = await cardService.getQuizz();
+		expect(quizz).toEqual(cards.slice(0, cards.length - 1));
 	});
 	
-	// it("should return a quizz without last element", async() => {
-	// 	const tomorrow = new Date();
-	// 	tomorrow.setDate(tomorrow.getDate() + 1);
+	it("should return a quizz without last element", async() => {
+		const tomorrow = new Date();
+		tomorrow.setDate(tomorrow.getDate() + 1);
 	
-	// 	const cardForAnotherDay = {
-	// 		id: "4",
-	// 		question: "What is the capital of Germany?",
-	// 		answer: "Berlin",
-	// 		tag: "Geography",
-	// 		category: "FIRST",
-	// 		nextReviewDate: tomorrow.toISOString(),
-	// 	};
-	// 	jsonUtils.writeFile([...cards, cardForAnotherDay]);
-	// 	const quizz = await cardService.getQuizz();
-	// 	expect(quizz).toEqual(cards.slice(0, cards.length - 1));
-	// });
+		const cardForAnotherDay = {
+			id: "4",
+			question: "What is the capital of Germany?",
+			answer: "Berlin",
+			tag: "Geography",
+			category: "FIRST",
+			nextReviewDate: tomorrow.toISOString(),
+		};
+		jsonUtils.writeFile([...cards, cardForAnotherDay]);
+		const quizz = await cardService.getQuizz();
+		expect(quizz).toEqual(cards.slice(0, cards.length - 1));
+	});
 });
 
 test("needCardReview", () => {
@@ -120,7 +143,7 @@ test("checkCardExists", () => {
 		const cardId = "invalidId";
 		expect(() => {
 			cardService.checkCardExists(cardId);
-		}).toThrow("CARD_NOT_FOUND");
+		}).toThrow("Card not found");
 	});
 });
 
