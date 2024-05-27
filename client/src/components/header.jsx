@@ -43,6 +43,22 @@ const Header = () => {
                 Créer une fiche
             </Heading>
             </Flex>
+            <Flex
+            alignItems="center"
+            display="flex"
+            flex={1}
+            justifyContent="end"
+            ml="auto"
+            >
+            <Heading
+                as={Link}
+                href="/cards/quizz"
+                fontSize={'lg'}
+                textTransform="uppercase"
+            >
+                Faire le quiz du jour
+            </Heading>
+            </Flex>
         </>
     </Flex>
   );

@@ -7,6 +7,7 @@ import App from './App.jsx';
 import Home from './pages/HomePage';
 import CardsList from './pages/CardsListPage.jsx';
 import CardsCreate from './pages/CardsCreatePage.jsx';
+import CardsQuizz from './pages/CardsQuizzPage.jsx';
 import extend_theme from './utils/chakra-theme.js';
 
 const theme = extendTheme(extend_theme);
@@ -20,6 +21,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Route index element={<Home />} />
             <Route path="cards" element={<CardsList />} />
             <Route path="cards/create" element={<CardsCreate />} />
+            <Route path="cards/quizz" element={<CardsQuizz />} />
             <Route path="*" element={<NotFoundPage />} />
           </Route>
         </Routes>
