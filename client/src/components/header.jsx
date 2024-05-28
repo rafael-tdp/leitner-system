@@ -1,67 +1,28 @@
-import { Flex, Heading, keyframes, Link } from '@chakra-ui/react';
+import React from "react";
 
 const Header = () => {
-  return (
-    <Flex
-      w="full"
-      justifyContent="space-between"
-      alignItems="center"
-      minH={20}
-      px={8}
-    >
-        <>
-            <Flex
-            alignItems="center"
-            display="flex"
-            flex={1}
-            justifyContent="end"
-            ml="auto"
-            >
-            <Heading
-                as={Link}
-                href="/cards"
-                fontSize={'lg'}
-                textTransform="uppercase"
-            >
-                Liste des fiches
-            </Heading>
-            </Flex>
-
-            <Flex
-            alignItems="center"
-            display="flex"
-            flex={1}
-            justifyContent="end"
-            ml="auto"
-            >
-            <Heading
-                as={Link}
-                href="/cards/create"
-                fontSize={'lg'}
-                textTransform="uppercase"
-            >
-                Créer une fiche
-            </Heading>
-            </Flex>
-            <Flex
-            alignItems="center"
-            display="flex"
-            flex={1}
-            justifyContent="end"
-            ml="auto"
-            >
-            <Heading
-                as={Link}
-                href="/cards/quizz"
-                fontSize={'lg'}
-                textTransform="uppercase"
-            >
-                Faire le quiz du jour
-            </Heading>
-            </Flex>
-        </>
-    </Flex>
-  );
+	return (
+		<div className="w-full flex justify-between items-center min-h-20 px-8 bg-primary text-white mb-4">
+			<a
+				href="/cards"
+				className="flex-1 text-lg uppercase text-center font-bold hover:underline hover:text-gray-300"
+			>
+				Cards list
+			</a>
+			<a
+				href="/cards/create"
+				className="flex-1 text-lg uppercase text-center font-bold hover:underline hover:text-gray-300"
+			>
+				Create a card
+			</a>
+			<a
+				href="/cards/quizz"
+				className="flex-1 text-lg uppercase text-center font-bold hover:underline hover:text-gray-300"
+			>
+				Quizz of the day
+			</a>
+		</div>
+	);
 };
 
 export default Header;

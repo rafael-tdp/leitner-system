@@ -8,6 +8,7 @@ import CardsList from './pages/CardsListPage.jsx';
 import CardsCreate from './pages/CardsCreatePage.jsx';
 import CardsQuizz from './pages/CardsQuizzPage.jsx';
 import extend_theme from './utils/chakra-theme.js';
+import './index.css';
 
 const theme = extendTheme(extend_theme);
 
