@@ -11,8 +11,17 @@ const cardService = {
 		return cardRepository.getAllCards(tags);
 	},
 
-	getQuizz: function () {
+	getQuizz: function (date) {
 		const cards = cardRepository.getAllCards();
+		if (date != null) {
+			const quizz = cards.map((card) => {
+				if (dateUtils.isNextReviewToday(new Date(card.nextReviewDate), date)) {
+					return card;
+				}
+			});
+			
+			return quizz;
+		}
 		const quizz = cards.map((card) => {
 			if (this.needCardReview(card)) {
 				return card;

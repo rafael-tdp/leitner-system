@@ -23,7 +23,8 @@ function addCard(req, res) {
 
 function getQuizz(req, res) {
 	try {
-		const quizz = cardService.getQuizz();
+		const date = req.query.date ?? null;
+		const quizz = cardService.getQuizz(date);
 		res.json(quizz);
 	} catch (error) {
 		res.status(500).json({ message: error.message });

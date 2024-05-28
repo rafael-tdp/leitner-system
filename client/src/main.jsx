@@ -1,10 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import NotFoundPage from './pages/NotFoundPage.jsx';
 import App from './App.jsx';
-import Home from './pages/HomePage';
 import CardsList from './pages/CardsListPage.jsx';
 import CardsCreate from './pages/CardsCreatePage.jsx';
 import CardsQuizz from './pages/CardsQuizzPage.jsx';
@@ -18,7 +17,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<App />}>
-            <Route index element={<Home />} />
+            <Route index element={<Navigate to="cards" replace />}/>
             <Route path="cards" element={<CardsList />} />
             <Route path="cards/create" element={<CardsCreate />} />
             <Route path="cards/quizz" element={<CardsQuizz />} />

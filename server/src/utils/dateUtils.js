@@ -5,8 +5,8 @@ function isSameDateOrPast(date1, date2) {
   return timestampDate1 <= timestampDate2;
 }
   
-  function isNextReviewToday(nextReviewDate) {
-    const currentDate = new Date();
+  function isNextReviewToday(nextReviewDate, date = null) {
+    const currentDate = date == null ? new Date() : new Date(date);
   
     const nextReviewDateWithoutTime = new Date(
       nextReviewDate.getFullYear(),
