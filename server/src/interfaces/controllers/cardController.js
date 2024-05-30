@@ -33,18 +33,21 @@ function getQuizz(req, res) {
 
 function answerCard(req, res) {
 	const cardId = req.params.cardId;
-	const answer = req.body.answer;
+	const isValid = req.body.isValid;
 	try {
-		AnswerValidator.isAnswerValid(cardId, answer);
-		const card = cardService.answerCard(cardId, answer);
-		res.json(card);
+		AnswerValidator.isAnswerValid(cardId, isValid);
+		cardService.answerCard(cardId, isValid);
+		res.status(204).json();
 	} catch (error) {
 		switch(error.message){
 			case 'CARD_NOT_FOUND':
 				res.status(404).json({ message: 'Card not found' });
 				break;
 			case 'BODY_MALFORMED':
-				res.status(400).json({ message: 'Card Id and answer are required' });
+				res.status(400).json({ message: 'Card Id and boolean isValid are required' });
+				break;
+			case 'CARD_DONE':
+				res.status(400).json({ message: 'Cannot answer a done card' });
 				break;
 			default:
 				res.status(500).json({ message: error.message });

@@ -55,6 +55,7 @@ const cardService = {
 	},
 
 	calculateNextReviewDate: function (currentDate, categoryValue) {
+		if(categoryValue === "DONE") return null;
 		const frequency = categories.find(
 			(category) => category.value === categoryValue
 		).frequency;
@@ -70,24 +71,23 @@ const cardService = {
 			currentDate,
 			nextCategoryValue
 		);
-		card.category = this.getNextCategory(card);
+		card.category = nextCategoryValue;
 		return cardRepository.updateCard(card);
 	},
 
 	processIncorrectAnswer: function (card) {
 		card.category = categories[0].value;
-		card.nextReviewDate = new Date();
+		const currentDate = new Date();
+		card.nextReviewDate = this.calculateNextReviewDate(
+			currentDate,
+			"FIRST"
+		);
 		return cardRepository.updateCard(card);
 	},
-
-	answerCard: function (cardId, answer) {
+	answerCard: function (cardId, isValid) {
 		const card = this.checkCardExists(cardId);
-		if (this.isCorrectAnswer(card, answer)) {
-			this.processCorrectAnswer(card);
-			return { isValid: true };
-		}
-		this.processIncorrectAnswer(card);
-		return { isValid: false };
+		if(card.category === "DONE") throw new Error(errors.CARD_DONE);
+		isValid ? this.processCorrectAnswer(card) : this.processIncorrectAnswer(card);
 	},
 };
 

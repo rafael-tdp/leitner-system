@@ -1,6 +1,7 @@
 errors = {
-    CARD_NOT_FOUND: "Card not found",
-    BODY_MALFORMED: "Body is malformed",
+    CARD_NOT_FOUND: "CARD_NOT_FOUND",
+    BODY_MALFORMED: "BODY_MALFORMED",
+    CARD_DONE: "CARD_DONE",
     CARD_VALIDATOR: {
         CARD_REQUIRED: "Card is required and must be an object",
         ID_REQUIRED: "Card id is required and must be a positive number",

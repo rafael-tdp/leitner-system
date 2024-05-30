@@ -27,6 +27,10 @@ const categories = [
 		value: "SEVENTH",
 		frequency: 64,
 	},
+	{
+		value: "DONE",
+		frequency: 0,
+	}
 ];
 
 module.exports = categories;
