@@ -47,10 +47,7 @@ const CardQuizzPage = () => {
 					setCards(dataFiltered);
 				} catch (error) {
 					alert("Erreur lors de la récupération des cartes");
-					console.error(
-						"Erreur lors de la récupération des cartes",
-						error
-					);
+					console.error("Erreur lors de la récupération des cartes", error);
 				}
 			};
 
@@ -60,61 +57,29 @@ const CardQuizzPage = () => {
 
 	const onSubmit = async (data) => {
 		const currentCard = cards[currentIndex];
-		const answer = await (
-			await fetch(
-				`${import.meta.env.VITE_BACKEND_URL}/cards/${
-					currentCard.id
-				}/answer`,
-				{
-					method: "PATCH",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(data),
-				}
-			)
-		).json();
-
-		if (answer.isValid) {
-			alert("Bonne réponse !");
-			if (currentIndex < cards.length - 1) {
-				setCurrentIndex(currentIndex + 1);
-				reset();
-			} else {
-				alert("You have finished the quiz of the day !");
-				window.location.href = "/cards";
+		const alertAnswer = confirm(
+			"Vous avez répondu : " +
+				data.answer +
+				". La réponse est : " +
+				currentCard.answer +
+				". Confirmez-vous votre réponse ?"
+		);
+		await fetch(
+			`${import.meta.env.VITE_BACKEND_URL}/cards/${currentCard.id}/answer`,
+			{
+				method: "PATCH",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ isValid: alertAnswer }),
 			}
+		);
+		if (currentIndex < cards.length - 1) {
+			setCurrentIndex(currentIndex + 1);
+			reset();
 		} else {
-			alert(
-				"Wrong answer, the answer was : " +
-					currentCard.answer +
-					", u answered: " +
-					data.answer
-			);
-			const result = confirm(
-				"Voulez-vous quand même valider la réponse ?"
-			);
-			if (result) {
-				await fetch(
-					`${import.meta.env.VITE_BACKEND_URL}/cards/${
-						currentCard.id
-					}/answer`,
-					{
-						method: "PATCH",
-						headers: {
-							"Content-Type": "application/json",
-						},
-						body: JSON.stringify(currentCard),
-					}
-				);
-			}
-			if (currentIndex < cards.length - 1) {
-				setCurrentIndex(currentIndex + 1);
-				reset();
-			} else {
-				alert("You have finished the quiz of the day !");
-				window.location.href = "/cards";
-			}
+			alert("You have finished the quiz of the day !");
+			window.location.href = "/cards";
 		}
 	};
 
@@ -142,14 +107,7 @@ const CardQuizzPage = () => {
 	return (
 		<div className="w-full p-4">
 			<h1 className="title">Quizz</h1>
-			<Box
-				maxW="md"
-				mx="auto"
-				mt={5}
-				p={5}
-				borderWidth={1}
-				borderRadius="lg"
-			>
+			<Box maxW="md" mx="auto" mt={5} p={5} borderWidth={1} borderRadius="lg">
 				{!quizSelected ? (
 					<VStack spacing={4}>
 						<Button colorScheme="blue" onClick={handleTodayQuiz}>
@@ -168,9 +126,7 @@ const CardQuizzPage = () => {
 									<Input
 										type="date"
 										value={quizDate}
-										onChange={(e) =>
-											setQuizDate(e.target.value)
-										}
+										onChange={(e) => setQuizDate(e.target.value)}
 									/>
 								</FormControl>
 								<Button
@@ -187,13 +143,8 @@ const CardQuizzPage = () => {
 						) : cards.length > 0 ? (
 							<>
 								<form onSubmit={handleSubmit(onSubmit)}>
-									<FormControl
-										isInvalid={errors.answer}
-										mb={4}
-									>
-										<FormLabel>
-											{currentCard.question}
-										</FormLabel>
+									<FormControl isInvalid={errors.answer} mb={4}>
+										<FormLabel>{currentCard.question}</FormLabel>
 										<Input
 											type="text"
 											placeholder="Enter your answer"
@@ -202,23 +153,17 @@ const CardQuizzPage = () => {
 											})}
 										/>
 										<FormErrorMessage>
-											{errors.answer &&
-												errors.answer.message}
+											{errors.answer && errors.answer.message}
 										</FormErrorMessage>
 									</FormControl>
-									<Button
-										mt={4}
-										colorScheme="blue"
-										type="submit"
-									>
+									<Button mt={4} colorScheme="blue" type="submit">
 										Validate
 									</Button>
 								</form>
 							</>
 						) : (
 							<Heading>
-								No cards for this date, please select another
-								date
+								No cards for this date, please select another date
 							</Heading>
 						)}
 					</>
