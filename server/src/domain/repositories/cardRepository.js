@@ -19,15 +19,7 @@ const cardRepository = {
 	},
 	getAllCards: function (tags) {
 		if (tags != null) {
-			if(tags instanceof Array) {
-				let expectedCards = [];
-				tags.forEach((tag) => {
-					const cardsWithTag = cards.filter((card) => card.tag === tag);
-					expectedCards = expectedCards.concat(cardsWithTag);
-				});
-				return expectedCards;
-			}
-			return cards.filter((card) => card.tag === tags);
+			return cards.filter((card) => tags.includes(card.tag));
 		}
 		return cards;
 	},
