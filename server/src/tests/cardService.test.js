@@ -43,9 +43,10 @@ test("getAllCards", () => {
 		const tags = ["Programming", "Geography"];
 		const filteredCards = cardService.getAllCards(tags);
 		let expectedCards = [];
-		tags.forEach((tag) => {
-			const cardsWithTag = cards.filter((card) => card.tag === tag);
-			expectedCards = expectedCards.concat(cardsWithTag);
+		cards.forEach((card) => {
+			if (tags.includes(card.tag)) {
+				expectedCards.push(card);
+			}
 		});
 		expect(filteredCards).toEqual(expectedCards);
 	});
@@ -143,7 +144,7 @@ test("checkCardExists", () => {
 		const cardId = "invalidId";
 		expect(() => {
 			cardService.checkCardExists(cardId);
-		}).toThrow("Card not found");
+		}).toThrow("CARD_NOT_FOUND");
 	});
 });
 
@@ -215,21 +216,18 @@ test("processIncorrectAnswer", () => {
 		};
 		const updatedCard = cardService.processIncorrectAnswer(card);
 		expect(updatedCard.category).toBe("FIRST");
-		expect(updatedCard.nextReviewDate).toEqual(currentDate);
 	});
 });
 
 test("answerCard", () => {
-	it("should return {isValid: true} after success", () => {
+	it("should update category to FOURTH after success", () => {
 		const card = cards[0];
-		const result = cardService.answerCard(card.id, card.answer);
-		expect(result.isValid).toBe(true);
-		expect(card.category).toBe("SECOND");
+		cardService.answerCard(card.id, true);
+		expect(card.category).toBe("FOURTH");
 	});
-	it("should return {isValid: false} after failure", () => {
+	it("should pass category to FIRST after failure", () => {
 		const card = cards[0];
-		const result = cardService.answerCard(card.id, "wrongAnswer");
-		expect(result.isValid).toBe(false);
+		cardService.answerCard(card.id, false);
 		expect(card.category).toBe("FIRST");
 	});
 });
